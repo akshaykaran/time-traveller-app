@@ -5,6 +5,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Available Scripts
 
 In the project directory, you can run:
+The project name is TIME TRAVELLER which check for user name and invite code and shows you the waiting time for your travel.
 
 ### `npm start`
 
