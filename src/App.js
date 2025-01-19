@@ -1,9 +1,27 @@
-function App() {
-  return (
-    <div className="App">
-      <h1 className="p-20 border-red-600 border-2">TIME TRAVELLER</h1>
-    </div>
-  );
-}
+import React from "react";
+import { createBrowserRouter } from "react-router";
+import { RouterProvider } from "react-router-dom";
+import AppRoutes from "./routes/AppRoutes";
+import Home from "./Components/Home";
+import WaitingList from "./Components/WaitingList";
 
+const App = () => {
+  const routes = createBrowserRouter([
+    {
+      path: "/",
+      element: <AppRoutes />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/waiting-list",
+          element: <WaitingList />,
+        },
+      ],
+    },
+  ]);
+  return <RouterProvider router={routes} />;
+};
 export default App;
