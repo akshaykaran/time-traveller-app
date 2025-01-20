@@ -1,60 +1,55 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import cars from "../assets/images/waiting_times1.png";
-import useValidation from "../utils/useValidation";
-import { validInviteCodes, waitingListData } from "../utils/mockfile";
+import { validInviteCodes, getRandomCar } from "../utils/mockfile";
 import { useNavigate } from "react-router";
-import { useWaitingList } from "../utils/useWaitingList";
-import { getRandomCar } from "../utils/mockfile";
 
 const Home = () => {
   const [userName, setUserName] = useState("");
-  const [inviteCode, setInviteCode] = useState("abc123");
-  const [visible, setVisible] = useState(false);
+  const [inviteCode, setInviteCode] = useState("");
   const [error, setError] = useState("");
-  const validCodes = validInviteCodes;
   const navigate = useNavigate();
 
-  const [waitingList, addUserToList] = useWaitingList(waitingListData);
-
-  const code = useValidation(inviteCode, validCodes);
-
   const handleClick = () => {
-    setVisible(true);
     if (!userName.trim()) {
       setError("User Name is required!");
       return;
     }
     setError("");
-    addUserToList(userName, code);
 
-    const updatedList = [
-      ...waitingList,
-      {
-        name: userName,
-        hasInviteCode: code,
-        position: code
-          ? waitingList.filter((user) => user.hasInviteCode).length + 1
-          : waitingList.length + 1,
-        car: getRandomCar(),
-      },
-    ];
+    const currentList = JSON.parse(localStorage.getItem("waitingList")) || [];
 
-    navigate("/waiting-list", { state: { waitingList: updatedList } });
+    const hasInviteCode = validInviteCodes.includes(inviteCode);
+
+    const newUser = {
+      name: userName,
+      hasInviteCode,
+      position: hasInviteCode
+        ? currentList.filter((user) => user.hasInviteCode).length + 1
+        : currentList.length + 1,
+      car: getRandomCar(),
+    };
+
+    const updatedList = hasInviteCode
+      ? [newUser, ...currentList]
+      : [...currentList, newUser];
+
+    localStorage.setItem("waitingList", JSON.stringify(updatedList));
+
+    navigate("/waiting-list");
   };
 
   return (
-    <div className="relative w-full h-full bg-customBlue flex lg:px-14 sm:px-10 overflow-hidden">
+    <div className="relative w-full lg:h-full md:h-full xl:h-full bg-customBlue flex lg:px-14 sm:px-10 overflow-hodden">
       <div className="lg:w-1/3 md:w-2/5 sm:w-2/6 flex justify-center flex-wrap">
-        <div className="w-56 h-[78vh] bg-customWhite object-cover"></div>
+        <div className="lg:w-56 sm:w-52 h-[78vh] bg-customWhite object-cover"></div>
         <img
-          className="w-[30%] h-[56%] absolute top-64 left-30"
+          className="lg:w-96 md:w-80 sm:w-72 xs:w-60 lg:h-96 md:h-80 sm:h-72 xs:h-60 absolute lg:top-48 md:top-60 sm:top-72 left-30"
           src={cars}
           alt="carsImage"
         />
       </div>
 
-      <div className="p-20">
+      <div className="p-20 lg:w-2/3 md:w-3/5 sm:w-4/6">
         <div className="flex justify-center mb-10">
           <h1 className="text-customWhite font-bold font-montserrat text-4xl align-middle">
             TIME TRAVELLER
@@ -78,7 +73,7 @@ const Home = () => {
           onChange={(e) => setUserName(e.target.value)}
         />
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-        <label htmlFor="user" className="font-montserrat text-customWhite ">
+        <label htmlFor="user" className="font-montserrat text-customWhite">
           INVITE CODE
         </label>
         <input
@@ -95,13 +90,6 @@ const Home = () => {
             SUBMIT
           </button>
         </div>
-        {visible && (
-          <div className="mt-8">
-            <h1 className="text-lg font-montserrat text-customWhite">
-              Hello {userName} Let's Check your Invite Code "{inviteCode}"
-            </h1>
-          </div>
-        )}
       </div>
     </div>
   );

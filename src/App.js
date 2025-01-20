@@ -2,8 +2,9 @@ import React from "react";
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes";
-import Home from "./Components/Home";
-import WaitingList from "./Components/WaitingList";
+import Home from "./pages/Home";
+import WaitingList from "./pages/WaitingList";
+import ContactUs from "./pages/ContactUs";
 
 const App = () => {
   const routes = createBrowserRouter([
@@ -18,6 +19,10 @@ const App = () => {
         {
           path: "/waiting-list",
           element: <WaitingList />,
+        },
+        {
+          path: "/contacts",
+          element: <ContactUs />,
         },
       ],
     },
