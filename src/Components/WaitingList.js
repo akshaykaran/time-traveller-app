@@ -1,18 +1,20 @@
 import React from "react";
 import UserCard from "./UserCard";
 import { waitingListData } from "../utils/mockfile";
+import { useLocation } from "react-router";
 
-function WaitingList() {
-  // Filter users with and without invite codes
-  const usersWithInviteCode = waitingListData.filter(
-    (user) => user.hasInviteCode
-  );
-  const usersWithoutInviteCode = waitingListData.filter(
+const WaitingList = () => {
+  const location = useLocation();
+  console.log("location", location);
+  const waitingList = location.state?.waitingList || waitingListData;
+
+  const usersWithInviteCode = waitingList.filter((user) => user.hasInviteCode);
+  const usersWithoutInviteCode = waitingList.filter(
     (user) => !user.hasInviteCode
   );
 
   return (
-    <div className="w-full h-[78vh] bg-customBlue flex lg:px-14 sm:px-10 overflow-hidden border-4 border-red-500">
+    <div className="w-full h-[78vh] bg-customBlue flex lg:px-14 sm:px-10 overflow-hidden">
       <div className="w-3/6 mt-10">
         <div className="flex justify-center items-center">
           <h1 className="text-2xl font-montserrat font-bold text-white align-middle mb-12">
@@ -34,7 +36,6 @@ function WaitingList() {
         </div>
       </div>
 
-      {/* Users without Invite Code Section */}
       <div className="w-3/6 mt-10">
         <div className="flex justify-center items-center">
           <h1 className="text-2xl font-montserrat font-bold text-white align-middle mb-12">
@@ -57,6 +58,6 @@ function WaitingList() {
       </div>
     </div>
   );
-}
+};
 
 export default WaitingList;

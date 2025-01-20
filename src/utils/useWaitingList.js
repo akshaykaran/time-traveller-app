@@ -1,16 +1,21 @@
 import { useState } from "react";
-
+import { getRandomCar } from "./mockfile";
 export const useWaitingList = (initialList) => {
   const [waitingList, setWaitingList] = useState(initialList);
 
-  const addUserToList = (newUser) => {
-    const hasInviteCode = newUser.hasInviteCode;
+  const addUserToList = (name, hasInviteCode) => {
     const newPosition = hasInviteCode
-      ? waitingList.filter((u) => u.hasInviteCode).length + 1
+      ? waitingList.filter((user) => user.hasInviteCode).length + 1
       : waitingList.length + 1;
 
-    const updatedList = [...waitingList, { ...newUser, position: newPosition }];
-    setWaitingList(updatedList);
+    const newUser = {
+      name,
+      hasInviteCode,
+      position: newPosition,
+      car: getRandomCar(),
+    };
+
+    setWaitingList([...waitingList, newUser]);
   };
 
   return [waitingList, addUserToList];

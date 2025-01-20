@@ -2,8 +2,10 @@ import React from "react";
 import { useState } from "react";
 import cars from "../assets/images/waiting_times1.png";
 import useValidation from "../utils/useValidation";
-import { validInviteCodes } from "../utils/mockfile";
+import { validInviteCodes, waitingListData } from "../utils/mockfile";
 import { useNavigate } from "react-router";
+import { useWaitingList } from "../utils/useWaitingList";
+import { getRandomCar } from "../utils/mockfile";
 
 const Home = () => {
   const [userName, setUserName] = useState("");
@@ -12,6 +14,8 @@ const Home = () => {
   const [error, setError] = useState("");
   const validCodes = validInviteCodes;
   const navigate = useNavigate();
+
+  const [waitingList, addUserToList] = useWaitingList(waitingListData);
 
   const code = useValidation(inviteCode, validCodes);
 
@@ -22,7 +26,21 @@ const Home = () => {
       return;
     }
     setError("");
-    navigate("/waiting-list", { state: { userName, inviteCode, code } });
+    addUserToList(userName, code);
+
+    const updatedList = [
+      ...waitingList,
+      {
+        name: userName,
+        hasInviteCode: code,
+        position: code
+          ? waitingList.filter((user) => user.hasInviteCode).length + 1
+          : waitingList.length + 1,
+        car: getRandomCar(),
+      },
+    ];
+
+    navigate("/waiting-list", { state: { waitingList: updatedList } });
   };
 
   return (

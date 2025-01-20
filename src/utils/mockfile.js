@@ -28,7 +28,7 @@ const carImage = [
   car12,
 ];
 
-const getRandomCar = () => {
+export const getRandomCar = () => {
   const randomIndex = Math.floor(Math.random() * carImage.length);
   return carImage[randomIndex];
 };
@@ -36,7 +36,7 @@ const getRandomCar = () => {
 export const waitingListData = [
   { name: "John Doe", hasInviteCode: true, position: 1, car: getRandomCar() },
   {
-    name: "Jane Smith",
+    name: "Jane Smi",
     hasInviteCode: false,
     position: 2,
     car: getRandomCar(),
