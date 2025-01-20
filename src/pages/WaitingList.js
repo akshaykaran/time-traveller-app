@@ -10,7 +10,7 @@ const WaitingList = () => {
 
   const handleClear = () => {
     localStorage.clear();
-    window.location.reload();
+    window.location.href = "/waiting-list";
   };
 
   return (
