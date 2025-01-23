@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import cars from "../assets/images/waiting_times1.png";
 import { validInviteCodes, getRandomCar } from "../utils/mockfile";
 import { useNavigate } from "react-router";
+import useValidation from "../utils/useValidation";
 
 const Home = () => {
   const [userName, setUserName] = useState("");
   const [inviteCode, setInviteCode] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const hasInviteCode = useValidation(inviteCode, validInviteCodes);
 
   const handleClick = () => {
     if (!userName.trim()) {
@@ -17,8 +19,6 @@ const Home = () => {
     setError("");
 
     const currentList = JSON.parse(localStorage.getItem("waitingList")) || [];
-
-    const hasInviteCode = validInviteCodes.includes(inviteCode);
 
     const newUser = {
       name: userName,
@@ -62,34 +62,36 @@ const Home = () => {
           </h4>
         </div>
 
-        <label htmlFor="user" className="font-montserrat text-customWhite">
-          USER NAME*
-        </label>
-        <input
-          type="text"
-          required
-          placeholder="Enter your User Name"
-          className="w-full p-2 mb-6 border-customPink border-2 bg-transparent rounded text-white"
-          onChange={(e) => setUserName(e.target.value)}
-        />
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-        <label htmlFor="user" className="font-montserrat text-customWhite">
-          INVITE CODE
-        </label>
-        <input
-          type="text"
-          placeholder="Enter the Invite Code"
-          className="w-full p-2 mb-6 border-customPink border-2 bg-transparent rounded text-white"
-          onChange={(e) => setInviteCode(e.target.value)}
-        />
-        <div className="flex justify-center items-center">
-          <button
-            className="lg:w-44 md:w-44 h-10 px-4 font-bold flex justify-center items-center bg-customPink text-customBlack rounded-lg lg:text-lg md:text-sm sm:text-xs"
-            onClick={handleClick}
-          >
-            SUBMIT
-          </button>
-        </div>
+        <form action="/waiting-list">
+          <label htmlFor="user" className="font-montserrat text-customWhite">
+            USER NAME*
+          </label>
+          <input
+            type="text"
+            required
+            placeholder="Enter your User Name"
+            className="w-full p-2 mb-6 border-customPink border-2 bg-transparent rounded text-white"
+            onChange={(e) => setUserName(e.target.value)}
+          />
+          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+          <label htmlFor="user" className="font-montserrat text-customWhite">
+            INVITE CODE
+          </label>
+          <input
+            type="text"
+            placeholder="Enter the Invite Code"
+            className="w-full p-2 mb-6 border-customPink border-2 bg-transparent rounded text-white"
+            onChange={(e) => setInviteCode(e.target.value)}
+          />
+          <div className="flex justify-center items-center">
+            <button
+              className="lg:w-44 md:w-44 h-10 px-4 font-bold flex justify-center items-center bg-customPink text-customBlack rounded-lg lg:text-lg md:text-sm sm:text-xs"
+              onClick={handleClick}
+            >
+              SUBMIT
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
