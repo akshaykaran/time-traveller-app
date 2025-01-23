@@ -23,15 +23,24 @@ const Home = () => {
     const newUser = {
       name: userName,
       hasInviteCode,
-      position: hasInviteCode
-        ? currentList.filter((user) => user.hasInviteCode).length + 1
-        : currentList.length + 1,
+      position: null,
       car: getRandomCar(),
     };
 
-    const updatedList = hasInviteCode
-      ? [newUser, ...currentList]
-      : [...currentList, newUser];
+    const inviteCodeUsers = currentList.filter((user) => user.hasInviteCode);
+    const noInviteCodeUsers = currentList.filter((user) => !user.hasInviteCode);
+
+    if (hasInviteCode) {
+      inviteCodeUsers.push(newUser);
+    } else {
+      noInviteCodeUsers.push(newUser);
+    }
+
+    const updatedList = [...inviteCodeUsers, ...noInviteCodeUsers];
+
+    updatedList.forEach((user, index) => {
+      user.position = index + 1;
+    });
 
     localStorage.setItem("waitingList", JSON.stringify(updatedList));
 
